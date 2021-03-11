@@ -1,9 +1,17 @@
+import axios from "axios";
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
+axios
+  .get("https://api.github.com/users/kennytran275")
+  .then((futureData) => {
+    console.log("2. here is the future data: ", futureData);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -16,6 +24,27 @@
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+
+// need an entrypoint var here
+
+axios
+  .get("https://api.github.com/users/kennytran275")
+  .then((res) => {
+    console.log("RESPONSE: \n \n", res);
+    console.log("res.data: \n \n", res.data);
+    const imgURL = res.data.avatar_url;
+    const name = res.data.name;
+    const username = res.data.login;
+    const location = res.data.location;
+    const profileLink = res.data.html_url;
+    const followers = res.data.followers;
+    const following = res.data.following;
+    const bio = res.data.bio;
+    // no need for loop here just pass parameters to cardMaker
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -49,6 +78,48 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function cardMaker() {
+  // instantiating the elements
+  const card = document.createElement("div");
+  const img = document.createElement("img");
+  const cardInfo = document.createElement("div");
+  const name = document.createElement("h3");
+  const username = document.createElement("p");
+  const location = document.createElement("p");
+  const profile = document.createElement("p");
+  const profileLink = document.createElement("a");
+  const followers = document.createElement("p");
+  const following = document.createElement("p");
+  const bio = document.createElement("p");
+
+  // setting class names, attributes and text
+  card.classList.add("card");
+  img.src = imgURL;
+  cardInfo.classList.add("card-info");
+  name.classList.add("name");
+  username.classList.add("username");
+  location.textContent = "Location: ";
+  profile.textContent = "Profile: ";
+  profileLink.href = profileURL;
+  followers.textContent = "Followers: ";
+  following.textContent = "Following: ";
+  bio.textContent = "Bio: ";
+
+  // creating the hierarchy
+  name.appendChild(img);
+  name.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(profileLink);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return card;
+}
 
 /*
   List of LS Instructors Github username's:
