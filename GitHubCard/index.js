@@ -30,8 +30,8 @@ const entryPoint = document.querySelector(".cards");
 axios
   .get("https://api.github.com/users/kennytran275")
   .then((res) => {
-    console.log("RESPONSE: \n \n", res);
-    console.log("res.data: \n \n", res.data);
+    // console.log("RESPONSE: \n \n", res);
+    // console.log("res.data: \n \n", res.data);
     const imgURL = res.data.avatar_url;
     const name = res.data.name;
     const username = res.data.login;
@@ -70,7 +70,45 @@ axios
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell",
+];
+
+followersArray.forEach(function (user) {
+  axios
+    .get(`https://api.github.com/users/${user}`)
+    .then((res) => {
+      const imgURL = res.data.avatar_url;
+      const name = res.data.name;
+      const username = res.data.login;
+      const location = res.data.location;
+      const profileLink = res.data.html_url;
+      const followers = res.data.followers;
+      const following = res.data.following;
+      const bio = res.data.bio;
+
+      const card = cardMaker({
+        imgURL: imgURL,
+        fullName: name,
+        username: username,
+        location: location,
+        profileURL: profileLink,
+        followers: followers,
+        following: following,
+        bio: bio,
+      });
+
+      entryPoint.append(card);
+      console.log(entryPoint);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
