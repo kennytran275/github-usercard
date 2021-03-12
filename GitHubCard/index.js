@@ -25,7 +25,7 @@ axios
     and append the returned markup to the DOM as a child of .cards
 */
 
-// need an entrypoint var here
+const entryPoint = document.querySelector(".cards");
 
 axios
   .get("https://api.github.com/users/kennytran275")
@@ -40,7 +40,20 @@ axios
     const followers = res.data.followers;
     const following = res.data.following;
     const bio = res.data.bio;
-    // no need for loop here just pass parameters to cardMaker
+
+    const card = cardMaker({
+      imgURL: imgURL,
+      fullName: name,
+      username: username,
+      location: location,
+      profileURL: profileLink,
+      followers: followers,
+      following: following,
+      bio: bio,
+    });
+
+    entryPoint.append(card);
+    console.log(entryPoint);
   })
   .catch((err) => {
     console.log(err);
@@ -79,44 +92,55 @@ const followersArray = [];
     </div>
 */
 
-function cardMaker() {
+function cardMaker({
+  imgURL,
+  fullName,
+  username,
+  location,
+  profileURL,
+  followers,
+  following,
+  bio,
+}) {
   // instantiating the elements
   const card = document.createElement("div");
   const img = document.createElement("img");
   const cardInfo = document.createElement("div");
-  const name = document.createElement("h3");
-  const username = document.createElement("p");
-  const location = document.createElement("p");
+  const gitName = document.createElement("h3");
+  const login = document.createElement("p");
+  const gitLocation = document.createElement("p");
   const profile = document.createElement("p");
   const profileLink = document.createElement("a");
-  const followers = document.createElement("p");
-  const following = document.createElement("p");
-  const bio = document.createElement("p");
+  const gitFollowers = document.createElement("p");
+  const gitFollowing = document.createElement("p");
+  const gitBio = document.createElement("p");
 
   // setting class names, attributes and text
   card.classList.add("card");
   img.src = imgURL;
   cardInfo.classList.add("card-info");
-  name.classList.add("name");
-  username.classList.add("username");
-  location.textContent = "Location: ";
-  profile.textContent = "Profile: ";
+  gitName.classList.add("name");
+  gitName.textContent = fullName;
+  login.classList.add("username");
+  login.textContent = username;
+  gitLocation.textContent = `Location: ${location}`;
+  profile.textContent = `Profile: ${profileURL}`;
   profileLink.href = profileURL;
-  followers.textContent = "Followers: ";
-  following.textContent = "Following: ";
-  bio.textContent = "Bio: ";
+  gitFollowers.textContent = `Followers: ${followers}`;
+  gitFollowing.textContent = `Following: ${following}`;
+  gitBio.textContent = `Bio: ${bio}`;
 
   // creating the hierarchy
-  name.appendChild(img);
-  name.appendChild(cardInfo);
-  cardInfo.appendChild(name);
-  cardInfo.appendChild(username);
-  cardInfo.appendChild(location);
+  card.appendChild(img);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(gitName);
+  cardInfo.appendChild(login);
+  cardInfo.appendChild(gitLocation);
   cardInfo.appendChild(profile);
   profile.appendChild(profileLink);
-  cardInfo.appendChild(followers);
-  cardInfo.appendChild(following);
-  cardInfo.appendChild(bio);
+  cardInfo.appendChild(gitFollowers);
+  cardInfo.appendChild(gitFollowing);
+  cardInfo.appendChild(gitBio);
 
   return card;
 }
